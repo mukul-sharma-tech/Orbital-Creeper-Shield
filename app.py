@@ -355,7 +355,7 @@ def generate_packet(threat=0.2):
 # Main Header with ISRO Branding
 st.markdown("""
     <div style="text-align: center; padding: 20px 0;">
-        <h1 class="main-header"><i class="fa-solid fa-satellite-dish"></i> ORBITAL CREEPER SHIELD</h1>
+        <h1 class="main-header"><i class="fa-solid fa-satellite-dish"></i> Anudesh Kavach</h1>
         <p class="sub-header">
             <span style="color: #ff6b35;">ISRO</span> NavIC/Gaganyaan • Autonomous AI Worm Defense System
         </p>
