@@ -16,7 +16,7 @@ from openpyxl.styles import Font, PatternFill, Alignment
 
 # Page config - ISRO Professional Theme
 st.set_page_config(
-    page_title="ISRO Orbital Creeper Shield", 
+    page_title="ISRO Anudesh Kavach", 
     layout="wide", 
     page_icon="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/satellite-dish.svg", # Professional SVG icon for page icon
     initial_sidebar_state="expanded"
