@@ -1,6 +1,6 @@
-# 🛰️ Orbital Creeper Shield: Autonomous AI Worm Defense for Satellites
+# 🛰️ Anudesh Kavach: Autonomous AI Worm Defense for Satellites
 
-**Orbital Creeper Shield** is a state-of-the-art prototype designed to protect satellite networks (like ISRO's NavIC or Gaganyaan missions) from self-replicating prompt injection "worms." Using a combination of Machine Learning (ML), Explainable AI (XAI), and packet analysis, it ensures the integrity of inter-satellite communication.
+**Anudesh Kavach** is a state-of-the-art prototype designed to protect satellite networks (like ISRO's NavIC or Gaganyaan missions) from self-replicating prompt injection "worms." Using a combination of Machine Learning (ML), Explainable AI (XAI), and packet analysis, it ensures the integrity of inter-satellite communication.
 
 ---
 

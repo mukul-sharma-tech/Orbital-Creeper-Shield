@@ -1,5 +1,5 @@
 """
-Orbital Creeper Shield - Comprehensive Model Benchmark
+Anudesh Kavach - Comprehensive Model Benchmark
 Compares multiple machine learning architectures across:
 - Accuracy, Precision, Recall, F1, ROC-AUC
 - Edge-Case Stress Testing (Tricky space commands, obfuscations, worms)
@@ -29,7 +29,7 @@ from sklearn.calibration import CalibratedClassifierCV
 from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
-from defense_engine import SecurityHeuristicTransformer, generate_satellite_domain_data
+from production.defense_engine import SecurityHeuristicTransformer, generate_satellite_domain_data
 
 DATASET_PATH = os.path.join(os.path.dirname(__file__), 'data.jsonl')
 PCAP_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'satellite_packets.pcap')
@@ -159,7 +159,7 @@ def evaluate_pcap(pipeline):
 
 def main():
     print("=" * 80)
-    print(">>> ORBITAL CREEPER SHIELD: MULTI-MODEL COMPETITIVE BENCHMARK")
+    print(">>> Anudesh Kavach: MULTI-MODEL COMPETITIVE BENCHMARK")
     print("=" * 80)
 
     X, y = load_data()

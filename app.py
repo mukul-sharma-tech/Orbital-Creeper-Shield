@@ -13,12 +13,12 @@ import io
 from datetime import datetime
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment
-import defense_engine
-from defense_engine import SecurityHeuristicTransformer
+import production.defense_engine as defense_engine
+from production.defense_engine import SecurityHeuristicTransformer
 
 # Page config - ISRO Professional Theme
 st.set_page_config(
-    page_title="ISRO Orbital Creeper Shield", 
+    page_title="ISRO Anudesh Kavach", 
     layout="wide", 
     page_icon="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/satellite-dish.svg", # Professional SVG icon for page icon
     initial_sidebar_state="expanded"
@@ -338,7 +338,7 @@ def generate_packet(threat=0.2):
 # Main Header with ISRO Branding
 st.markdown("""
     <div style="text-align: center; padding: 20px 0;">
-        <h1 class="main-header"><i class="fa-solid fa-satellite-dish"></i> ORBITAL CREEPER SHIELD</h1>
+        <h1 class="main-header"><i class="fa-solid fa-satellite-dish"></i> Anudesh Kavach</h1>
         <p class="sub-header">
             <span style="color: #ff6b35;">ISRO</span> NavIC/Gaganyaan • Autonomous AI Worm Defense System
         </p>
@@ -392,10 +392,25 @@ with st.sidebar:
             </h3>
         """, unsafe_allow_html=True)
         st.session_state.threat_level = st.slider(
-            "Threat Level Simulation", 
+            "Threat Level Simulation",
             0.0, 1.0, 0.2, 0.05,
             help="Adjust the probability of malicious packets in simulation"
         )
+
+        # Prompt safety checker (available in any mode)
+        st.markdown("---")
+        with st.expander("🔎 Prompt Safety Checker"):
+            user_prompt = st.text_area("Enter a prompt to evaluate", height=100)
+            if st.button("Check Prompt"):
+                if not user_prompt.strip():
+                    st.warning("Please enter a prompt before checking.")
+                else:
+                    pred = int(model.predict([user_prompt])[0])
+                    prob = float(model.predict_proba([user_prompt])[0][1])
+                    status = "⚠️ Malicious" if pred else "✅ Safe"
+                    color = "#ef4444" if pred else "#10b981"
+                    st.markdown(f"<h2 style='color:{color}'>{status}</h2>", unsafe_allow_html=True)
+                    st.markdown(f"**Threat probability:** {prob:.1%}")
         
         # Threat level indicator
         threat_color = "#ef4444" if st.session_state.threat_level > 0.5 else "#f59e0b" if st.session_state.threat_level > 0.2 else "#10b981"
@@ -1236,7 +1251,7 @@ with col2:
             detection_rate = worms / total if total > 0 else 0
             
             summary_text = f"""
-ISRO ORBITAL CREEPER SHIELD - MISSION REPORT
+ISRO Anudesh Kavach - MISSION REPORT
 {'=' * 60}
 
 Report Type: {report_type}
@@ -1259,7 +1274,7 @@ DETAILED DETECTIONS
 {df_report[['Timestamp', 'Status', 'Malicious_Prob']].head(20).to_string()}
 
 {'=' * 60}
-ISRO NavIC/Gaganyaan Orbital Creeper Shield v1.0
+ISRO NavIC/Gaganyaan Anudesh Kavach v1.0
 Powered by SHAP XAI | Zero-mass onboard AI defense
 """
             
@@ -1277,7 +1292,7 @@ st.markdown("""
     <div class="footer">
         <p style="font-size: 1.1rem; margin-bottom: 10px;">
             <span class="footer-highlight">ISRO</span> NavIC/Gaganyaan • 
-            <span class="footer-highlight">Orbital Creeper Shield</span> v1.0
+            <span class="footer-highlight">Anudesh Kavach</span> v1.0
         </p>
         <p style="font-size: 0.9rem; color: #64748b;">
             Zero-mass onboard AI defense • Powered by SHAP XAI • 

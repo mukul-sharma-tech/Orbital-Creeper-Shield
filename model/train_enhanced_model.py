@@ -1,5 +1,5 @@
 """
-Enhanced Model Trainer for Orbital Creeper Shield
+Enhanced Model Trainer for Anudesh Kavach
 Builds a high-accuracy, robust defense pipeline against prompt injection worms
 for satellite constellations (ISRO NavIC / Gaganyaan / Sat Swarms).
 """
@@ -346,7 +346,7 @@ def load_all_training_data():
 
 def main():
     print("=" * 70)
-    print(">>> TRAINING ENHANCED ORBITAL CREEPER SHIELD MODEL")
+    print(">>> TRAINING ENHANCED Anudesh Kavach MODEL")
     print("=" * 70)
     
     X, y = load_all_training_data()

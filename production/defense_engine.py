@@ -1,5 +1,5 @@
 """
-Orbital Creeper Shield - Core Defense & Explainability Engine
+Anudesh Kavach - Core Defense & Explainability Engine
 Powers autonomous AI worm detection, telemetry parsing, and dynamic SHAP-style
 feature attribution for satellite constellations (ISRO NavIC / Gaganyaan / CubeSat swarms).
 """
@@ -478,3 +478,5 @@ def generate_packet(threat=0.2):
     sat_id = np.random.randint(1, 9)
     src_ip = f"10.240.{sat_id}.{np.random.randint(10, 50)}" # Realistic ISL IP subnet
     return src_ip, payload, is_malicious
+
+

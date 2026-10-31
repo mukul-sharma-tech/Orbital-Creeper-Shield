@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '.')
 import joblib
 import scapy.all as scapy
-from defense_engine import SecurityHeuristicTransformer
+from production.defense_engine import SecurityHeuristicTransformer
 
 model = joblib.load('worm_defense_model.pkl')
 pkts = scapy.rdpcap('satellite_packets.pcap')
