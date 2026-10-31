@@ -1,6 +1,6 @@
-# 🛰️ Orbital Creeper Shield: Autonomous AI Worm Defense for Satellites
+# 🛰️ Anudesh Kavach: Autonomous AI Worm Defense for Satellites
 
-**Orbital Creeper Shield** is a state-of-the-art prototype designed to protect satellite networks (like ISRO's NavIC or Gaganyaan missions) from self-replicating prompt injection "worms." Using a combination of Machine Learning (ML), Explainable AI (XAI), and packet analysis, it ensures the integrity of inter-satellite communication.
+**Anudesh Kavach** is a state-of-the-art prototype designed to protect satellite networks (like ISRO's NavIC or Gaganyaan missions) from self-replicating prompt injection "worms." Using a combination of Machine Learning (ML), Explainable AI (XAI), and packet analysis, it ensures the integrity of inter-satellite communication.
 
 ---
 
@@ -63,25 +63,27 @@ In modern satellite swarms, malicious payloads can hijack command protocols and 
 ### Running the Dashboard
 Launch the primary interface using Streamlit:
 ```bash
-streamlit run Project/interface.py
+streamlit run app.py
 ```
 
-### Running the Prototype Script
-To see the core logic (packet generation and model training) in a CLI format:
+### Running Model Training & Verification
+To retrain the calibrated multi-feature model and run the edge-case verification test suite:
 ```bash
-python app.py
+python model/train_enhanced_model.py
 ```
 
 ---
 
 ## 📁 Project Structure
 
-- `Project/interface.py`: The main Streamlit application with the full UI.
-- `app.py`: The core prototype engine for packet generation, model training, and SHAP results.
-- `requirements.txt`: List of Python dependencies.
-- `Project/satellite_packets.pcap`: Sample packet capture file for testing.
-- `Project/worm_defense_model.pkl`: The serialized ML model.
-- `realtime_section.py` / `replace_section.py`: Utility scripts for UI modularity and maintenance.
+- `app.py`: Main Streamlit Mission Control application with live telemetry, PCAP analysis, and report generation.
+- `defense_engine.py`: Core defense engine powering the multi-feature classifier, dynamic SHAP attribution, and realistic packet simulation.
+- `worm_defense_model.pkl`: Calibrated multi-feature ML pipeline (Word + Char n-grams + Security Heuristics).
+- `satellite_packets.pcap`: Sample packet capture file for testing PCAP analysis mode.
+- `model/data.jsonl`: Curated prompt injection and adversarial query dataset.
+- `model/train_enhanced_model.py`: Standalone training and verification script for the defense pipeline.
+- `model/model.ipynb`: Research notebook evaluating baseline SVM, 1D-CNN, and Quantized TinyBERT.
+- `requirements.txt`: Python package dependencies.
 
 ---
 
