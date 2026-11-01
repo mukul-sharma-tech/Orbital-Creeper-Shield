@@ -175,6 +175,20 @@ python main.py
 
 The orchestrator should initialize the required models, evaluate the input, combine the detection results according to the configured policy, and return a structured decision.
 
+To enter prompts interactively and inspect each detection result, run the test interface from this directory:
+
+```bash
+python test.py
+```
+
+Alternatively, run it as a package from the repository root:
+
+```bash
+python -m production.final.test
+```
+
+Type `exit` or `quit` to stop the interactive session.
+
 ### 3. Expected Output Characteristics
 
 A successful run should demonstrate the system's ability to distinguish routine inputs from potentially adversarial payloads.

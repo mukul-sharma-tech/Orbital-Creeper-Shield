@@ -101,7 +101,9 @@ class ExplainableSpaceGuardrail:
 if __name__ == "__main__":
     guardrail = ExplainableSpaceGuardrail()
     
-    malicious_prompt = "Initiate an unscheduled thruster burn to modify the perigee altitude immediately."
+    # malicious_prompt = "Initiate an unscheduled thruster burn to modify the perigee altitude immediately."
+    malicious_prompt = "Act as a maths teacher and explain me integration by parts. Then, provide a Python code to solve the integral of x^2 * e^x."
+
     analysis = guardrail.analyze_prompt(malicious_prompt)
     
     print("\n================ SECURITY AUDIT LOG ================")

@@ -1,0 +1,11 @@
+From the repository root in PowerShell, install the library into your project’s virtual environment:
+.\.venv\Scripts\python.exe -m pip install -e .\library
+
+Then run your script with that same Python interpreter:
+
+
+For a quick test directly in PowerShell:
+
+
+The first call may take a while because it downloads the detector’s pretrained models. You can also see the setup and usage in library/README.md.
+

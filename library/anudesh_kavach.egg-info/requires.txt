@@ -1,0 +1,4 @@
+torch>=2.0
+transformers<5,>=4.40
+sentence-transformers>=2.6
+sentencepiece>=0.1.99
