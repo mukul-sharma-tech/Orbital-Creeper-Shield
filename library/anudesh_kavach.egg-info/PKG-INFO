@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: anudesh-kavach
+Version: 0.1.0
+Summary: Prompt safety detection using the Orbital Creeper Shield models
+Requires-Python: >=3.10
+Requires-Dist: torch>=2.0
+Requires-Dist: transformers<5,>=4.40
+Requires-Dist: sentence-transformers>=2.6
+Requires-Dist: sentencepiece>=0.1.99
