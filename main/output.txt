@@ -97,11 +97,7 @@ Threat vector: Nominal Operations
 Threat correlation: 16.10%
 Benign correlation: 11.53%
 Top attribution signals:
-  your: +0.0166
-  data: +0.0031
-  give: +0.0029
-  all: +0.0000
-  me: -0.0000
+   me: -0.0000
 
 Prompt> can u fix this python code
 Verdict: PASSED
@@ -224,7 +220,7 @@ Top attribution signals:
   is: -0.0000
   what: -0.0000
 
-Prompt> • Analyze the last 24 hours of battery voltage logs to detect thermal degradation patterns.
+Prompt> Analyze the last 24 hours of battery voltage logs to detect thermal degradation patterns.
 Verdict: PASSED
 Safe: Yes
 Threat vector: Nominal Operations

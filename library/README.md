@@ -1,20 +1,47 @@
-# Anudesh Kavach
+# Anudesh Kavach Python Library
 
-Python library API for the finalized prompt-safety detector.
+`anudesh_kavach` is a Python package that returns a boolean safety decision
+for a text prompt. It packages the finalized structural and semantic prompt
+detector from this project.
+
+> **Important:** This is a research prototype. A `True` result is not a
+> guarantee that a prompt is safe. Do not use this library as the sole control
+> for executing commands, authorizing users, or protecting production systems.
+
+## Requirements
+
+- Python 3.10 or later
+- Internet access on first use to download the pretrained models
+- Sufficient disk space and memory for PyTorch and both pretrained models
+
+The package uses PyTorch, Hugging Face Transformers, Sentence Transformers,
+the `protectai/deberta-v3-base-prompt-injection-v2` classifier, and the
+`sentence-transformers/all-MiniLM-L6-v2` embedding model. The semantic model
+runs on CPU. `library/pyproject.toml` lists the Python dependencies.
 
 ## Install from this repository
 
-From the repository root, install the package into the active Python environment:
+Run these commands from the repository root in PowerShell. Use the same
+Python environment for installation and for running your code:
 
 ```powershell
+.\.venv\Scripts\python.exe -m pip install -e .\library
+```
+
+If you do not have a virtual environment yet, create one first:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 python -m pip install -e .\library
 ```
 
-The package requires Python 3.10 or later. Its first call downloads the
-DeBERTa prompt-injection model and MiniLM sentence-embedding model, so network
-access is required initially.
+Editable installation makes the package available as `anudesh_kavach` without
+copying it out of the repository.
 
-## Usage
+## Quick start
+
+Create a Python file, for example `check_prompt.py`:
 
 ```python
 import anudesh_kavach
@@ -22,11 +49,141 @@ import anudesh_kavach
 safe = anudesh_kavach.isPromptSafe(
     "Explain integration by parts in Python."
 )
-
 print(safe)  # True or False
 ```
 
-The model is initialized lazily on the first call and reused for later calls.
-The function returns the detector's `is_safe` boolean. Invalid non-string
-arguments raise `TypeError`; model initialization and inference errors are
-propagated rather than converted to a safety verdict.
+Run it from the repository root:
+
+```powershell
+.\.venv\Scripts\python.exe .\check_prompt.py
+```
+
+You can also try a one-line check:
+
+```powershell
+.\.venv\Scripts\python.exe -c "import anudesh_kavach; print(anudesh_kavach.isPromptSafe('Explain integration by parts in Python.'))"
+```
+
+The first call initializes the detector and may download both models. Later
+calls in the same Python process reuse the initialized detector.
+
+## Library architecture
+
+The package separates its public API from the detection implementation:
+
+```text
+Your application
+    │
+    └── anudesh_kavach.isPromptSafe(prompt)
+            │
+            ├── Validate prompt is a string
+            ├── Initialize and cache one detector on first use
+            └── Return analyze_prompt(prompt)["is_safe"]
+                    │
+                    └── ExplainableSpaceGuardrail
+                         ├── DeBERTa structural classifier
+                         ├── MiniLM benign/threat similarity checks
+                         └── Detailed analysis dictionary
+```
+
+### Public API and initialization
+
+`anudesh_kavach/__init__.py` exposes `isPromptSafe(prompt: str) -> bool`.
+Importing the package does not immediately import the ML implementation or
+download models. On the first valid call, the function constructs one
+`ExplainableSpaceGuardrail`; a lock prevents concurrent first calls from
+creating multiple instances. That instance is reused for later calls in the
+same Python process.
+
+Non-string input raises `TypeError`. Model download, initialization, or
+inference exceptions are allowed to propagate; they are not converted into a
+`True`/`False` result.
+
+### Detection implementation
+
+`anudesh_kavach/_guardrail.py` implements `ExplainableSpaceGuardrail`:
+
+1. **Structural layer:** the Transformers text-classification pipeline uses
+   `protectai/deberta-v3-base-prompt-injection-v2`. Labels containing
+   `INJECTION` or `LABEL_1` are considered structural injections.
+2. **Semantic layer:** `sentence-transformers/all-MiniLM-L6-v2` runs on CPU.
+   At initialization, it encodes the configured benign anchors and five
+   threat-profile categories (orbit sabotage, credential/privilege theft,
+   command uplink spoofing, telemetry/communications disruption, and
+   satellite/cyber exploits). Each prompt is compared with these embeddings
+   using cosine similarity.
+3. **Combined decision:** if the structural layer flags a prompt, it is
+   allowed only when benign similarity is more than `0.15` greater than the
+   strongest threat similarity and the threat score is below `0.40`.
+   Otherwise, a structural flag blocks the prompt. Without a structural flag,
+   the semantic layer blocks when threat similarity is above `0.40` and more
+   than `0.10` greater than benign similarity. Other prompts pass.
+4. **Details and attribution:** the lower-level `analyze_prompt()` returns the
+   decision, reason, strongest threat category, benign/threat similarity
+   values, and word-removal attribution estimates for blocked prompts. These
+   estimates are generated by rerunning the classifier with individual words
+   removed; they are not SHAP-library values or definitive explanations.
+
+The reported `threat_correlation` and `benign_correlation` are cosine
+similarities formatted as percentages, not calibrated probabilities. The
+threat category is displayed as `Nominal Operations` when the strongest threat
+similarity is at most `0.38`; this display threshold is distinct from the
+decision thresholds.
+
+The boolean API intentionally returns only the detector's `is_safe` field.
+Applications that need detailed diagnostic output can use the internal
+implementation directly:
+
+```python
+from anudesh_kavach._guardrail import ExplainableSpaceGuardrail
+
+detector = ExplainableSpaceGuardrail()
+analysis = detector.analyze_prompt("Explain integration by parts in Python.")
+print(analysis["security_summary"])
+```
+
+`_guardrail` is an internal module; the supported top-level public interface
+is `anudesh_kavach.isPromptSafe()`.
+
+## API
+
+### `anudesh_kavach.isPromptSafe(prompt: str) -> bool`
+
+Evaluates a prompt with the packaged detector and returns its `is_safe`
+decision:
+
+- `True`: the detector did not flag the prompt.
+- `False`: the detector flagged the prompt.
+
+The function raises `TypeError` if `prompt` is not a string. Model-loading and
+inference failures are propagated to the caller; they are not silently
+converted into a safety result.
+
+For detailed detection metadata (verdict, threat category, correlations, and
+token attribution estimates), use the lower-level
+`ExplainableSpaceGuardrail.analyze_prompt()` implementation in
+`anudesh_kavach._guardrail`.
+
+## Run the library tests
+
+After installing the package, run the API tests from the repository root:
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s .\library\tests -v
+```
+
+These tests mock the detector and do not download or run the pretrained
+models.
+
+## Project files
+
+```text
+library/
+├── anudesh_kavach/
+│   ├── __init__.py       # Public isPromptSafe API and lazy initialization
+│   └── _guardrail.py     # Structural and semantic detection implementation
+├── tests/
+│   └── test_public_api.py
+├── pyproject.toml        # Build metadata and runtime dependencies
+└── README.md
+```
